@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/dairyapp/static/css/main.fed58704.css",
+    "main.js": "/dairyapp/static/js/main.acc50fbb.js",
+    "index.html": "/dairyapp/index.html",
+    "main.fed58704.css.map": "/dairyapp/static/css/main.fed58704.css.map",
+    "main.acc50fbb.js.map": "/dairyapp/static/js/main.acc50fbb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fed58704.css",
+    "static/js/main.acc50fbb.js"
+  ]
+}
