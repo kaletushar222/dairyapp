@@ -1,0 +1,20 @@
+.dairy-invoice{
+    margin: 2% 15% 2% 15%;
+    border: 2px solid grey;
+    padding: 2%;
+}
+
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 16px;
+    }
+    .dairy-invoice{
+        margin: 3%;
+        padding: 2%;
+    }
+}
+
+.border-div{ 
+    border: 1px solid black;
+    padding: 2%;
+}
