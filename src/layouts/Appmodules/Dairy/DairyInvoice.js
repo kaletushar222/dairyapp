@@ -5,11 +5,11 @@ import './DairyApp.css'
 import moment from 'moment';
 
 class DairyInvoice extends React.Component {
-    constructor(props){
-        super(props);
+    
+	getInitialState = () =>{
 		const d = new Date();
 		let month = d.getMonth();
-        this.state = {
+		let object = {
 			dairyInvoice :{
 				name: '',
 				month: month,
@@ -23,10 +23,28 @@ class DairyInvoice extends React.Component {
 			},
 			isEditView: true
         }
-    }
+		return object
+	}
 
+	constructor(props){
+        super(props);
+        this.state = this.getInitialState()
+    }
+	
 	componentDidMount(){
 		this.updateDaysInMonth()
+		let prevState = localStorage.getItem("prevState")
+		console.log()
+		if(prevState){
+			prevState = JSON.parse(prevState)
+			this.setState(prevState)
+		}
+		window.addEventListener('beforeunload', this.componentCleanup);
+	}
+
+	componentCleanup = () =>{
+		const prevState = JSON.stringify(this.state)
+		localStorage.setItem("prevState", prevState)
 	}
 
 	handleDairyInvoiceUpdate = (event) =>{
@@ -134,6 +152,17 @@ class DairyInvoice extends React.Component {
 		document.getElementById("hide-btn").style.display = "block"; 
 	}
 
+	componentWillUnmount(){
+		this.componentCleanup();
+        window.removeEventListener('beforeunload', this.componentCleanup);
+	}
+
+	reset = () =>{
+		localStorage.removeItem('prevState')
+		this.setState(this.getInitialState())
+		//this.updateDaysInMonth()
+	}
+
     render() {
 		const { isEditView } = this.state
 		const renderUI = isEditView? this.getEditView():this.getPrintView()
@@ -220,6 +249,10 @@ class DairyInvoice extends React.Component {
 					<Button variant="primary" onClick={ this.toggleEdit }>
 						Save
 					</Button>
+					&nbsp;&nbsp;&nbsp;
+					<Button variant="danger" onClick={ this.reset }>
+						Reset
+					</Button>
 					<br/><br/><br/><br/>
 				</center>
 			</div>
@@ -281,6 +314,10 @@ class DairyInvoice extends React.Component {
 							&nbsp;&nbsp;
 							<Button variant="secondary" onClick={ this.toggleEdit }>
 								Edit
+							</Button>
+							&nbsp;&nbsp;&nbsp;
+							<Button variant="danger" onClick={ this.reset }>
+								Reset
 							</Button>
 						</div>
 						
