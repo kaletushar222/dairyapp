@@ -1,8 +1,7 @@
-import React from 'react';
-import { Table, Row, Col, Form, Button } from 'react-bootstrap';
-import DatePicker from 'react-datepicker';
-import './DairyApp.css'
 import moment from 'moment';
+import React from 'react';
+import { Button, Col, Form, Row, Table } from 'react-bootstrap';
+import './DairyApp.css';
 
 class DairyInvoice extends React.Component {
     
@@ -19,7 +18,8 @@ class DairyInvoice extends React.Component {
 				year: '2022',
 				individualDayRates:[],
 				totalMilk: 0,
-				totalPrice: 0
+				totalPrice: 0,
+				defaultQuantity: 0
 			},
 			isEditView: true
         }
@@ -69,14 +69,14 @@ class DairyInvoice extends React.Component {
 		const { dairyInvoice } = this.state
 		let rate = 0
 		if(event.target.value){
-			rate = parseFloat(event.target.value)
+			rate = parseFloat(event.target.value, 10);
+			console.log("rate : ", rate)
 		}
-		console.log(event.target.value, '------>', rate)
 		dairyInvoice[event.target.name] = parseFloat(rate)
 		this.setState({
             dairyInvoice: dairyInvoice
         }, ()=>{
-			this.calculateTotal()
+			this.calculateTotal(dairyInvoice)
 		})
 	}
 
@@ -113,8 +113,21 @@ class DairyInvoice extends React.Component {
 		this.setState({
 			dairyInvoice: dairyInvoice
 		}, ()=>{
-			this.calculateTotal()
+			this.calculateTotal(dairyInvoice)
 		})
+	}
+
+	handleDefaultQuantityUpdate = (event, index) => {
+		const { dairyInvoice } = this.state
+		let quantity = 0
+		if(event.target.value){
+			quantity = parseFloat(event.target.value)
+		}
+		dairyInvoice['defaultQuantity'] = quantity
+		dairyInvoice.individualDayRates.forEach((object, key)=>{
+			dairyInvoice.individualDayRates[key]['quantity'] = quantity
+		})
+		this.calculateTotal(dairyInvoice)
 	}
 	
 	toggleEdit = () =>{
@@ -124,11 +137,10 @@ class DairyInvoice extends React.Component {
 		})
 	}
 
-	calculateTotal = () =>{
-		const { dairyInvoice } = this.state
+	calculateTotal = (dairyInvoice) =>{
 		let totalPrice = 0
 		let totalMilk = 0
-		dairyInvoice.individualDayRates.map((object, index)=>{
+		dairyInvoice.individualDayRates.forEach((object, index)=>{
 			const price = parseFloat(parseFloat(parseFloat(dairyInvoice.rate) * object.quantity).toFixed(2))
 			dairyInvoice.individualDayRates[index]["price"] = price
 			totalPrice = totalPrice + price
@@ -148,8 +160,11 @@ class DairyInvoice extends React.Component {
 		let title = document.title
 		document.title = dairyInvoice.name+'-'+dairyInvoice.month+'-'+dairyInvoice.year		
 		window.print();
-		document.title = document.title
-		document.getElementById("hide-btn").style.display = "block"; 
+		document.title = title
+
+		setTimeout(()=>{
+			document.getElementById("hide-btn").style.display = "block"; 
+		}, 1000);
 	}
 
 	componentWillUnmount(){
@@ -160,7 +175,7 @@ class DairyInvoice extends React.Component {
 	reset = () =>{
 		localStorage.removeItem('prevState')
 		this.setState(this.getInitialState())
-		//this.updateDaysInMonth()
+		this.updateDaysInMonth()
 	}
 
     render() {
@@ -204,8 +219,23 @@ class DairyInvoice extends React.Component {
 							</Row>
 							<br/>
 							<Row style={{margin: "auto"}}>
-								<Form.Label>Rate(Rs.): </Form.Label>
-								<Form.Control value={ dairyInvoice.rate } type="number" placeholder="Enter Rate" name="rate" onChange={this.handleDairyInvoiceRate}/>
+								<Col>
+									<Form.Label>Rate(Rs.)/Ltr: </Form.Label>
+									<Form.Control value={ dairyInvoice.rate } type="text" placeholder="Enter Rate" name="rate" onChange={this.handleDairyInvoiceRate}/>
+								</Col>
+								<Col>
+									<Form.Label>Default Quantity </Form.Label>
+									<Form.Select name="quantity" value={dairyInvoice.defaultQuantity} onChange={ this.handleDefaultQuantityUpdate }> 
+										<option value="0">0</option>
+										<option value="0.25">0.25</option>
+										<option value="0.5">0.5</option>
+										<option value="1">1</option>
+										<option value="1.5">1.5</option>
+										<option value="2">2</option>
+										<option value="2.5">2.5</option>
+										<option value="3">3</option>
+									</Form.Select> &nbsp; Ltr
+								</Col>
 							</Row>
 						</div>
 						<br/>
@@ -224,7 +254,8 @@ class DairyInvoice extends React.Component {
 											<td>{day.date}</td>
 											<td>
 												<Form.Select value={day.quantity} name="quantity" onChange={(event)=>{this.handleIndividualQuantityUpdate(event, index)}}> 
-												<option value="0">0</option>
+													<option value="0">0</option>
+													<option value="0.25">0.25</option>
 													<option value="0.5">0.5</option>
 													<option value="1">1</option>
 													<option value="1.5">1.5</option>
@@ -266,7 +297,10 @@ class DairyInvoice extends React.Component {
 			<div>
 				<div className='dairy-invoice'>
 						<div className='border-div'>
-							<center><h1>SHRI DATTA DAIRY FARM</h1></center>
+							<center>
+								<h1 style={{ borderBottom: "1px solid #e5e2e2" }}>SHRI DATTA DAIRY FARM</h1>
+								<div>Datta Shinde | 7385063457 </div>
+							</center>
 							<br/>
 							<Row style={{margin: "auto"}}>
 								<Form.Label>Name: <b>{ dairyInvoice.name }</b></Form.Label>
@@ -275,7 +309,7 @@ class DairyInvoice extends React.Component {
 								<Form.Label>Month: <b>{months[dairyInvoice.month] +'-'+dairyInvoice.year}</b></Form.Label><br/>
 							</Row>
 							<Row style={{margin: "auto"}}>
-								<Form.Label>Rate (Rs.): <b>{ dairyInvoice.rate }</b>/-</Form.Label>
+								<Form.Label>Rate(Rs.)/Ltr: <b>{ dairyInvoice.rate }</b>/-</Form.Label>
 							</Row>
 						</div>
 						<br/>
@@ -319,10 +353,9 @@ class DairyInvoice extends React.Component {
 							<Button variant="danger" onClick={ this.reset }>
 								Reset
 							</Button>
+							<br/><br/><br/><br/>
 						</div>
-						
 					</center>
-				<br/><br/><br/><br/>
 			</div>
   		);
 	}
