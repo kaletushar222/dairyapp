@@ -162,9 +162,9 @@ class DairyInvoice extends React.Component {
 		window.print();
 		document.title = title
 
-		window.onafterprint = function(){
-			document.getElementById("hide-btn").style.display = "block";
-		}
+		setTimeout(()=>{
+			document.getElementById("hide-btn").style.display = "block"; 
+		}, 1000);
 	}
 
 	componentWillUnmount(){
@@ -304,7 +304,6 @@ class DairyInvoice extends React.Component {
 								<h1 style={{ borderBottom: "1px solid #e5e2e2" }}>SHRI DATTA DAIRY FARM</h1>
 								<div>Datta Shinde | 7385063457 </div>
 							</center>
-							<br/>
 							<Row style={{margin: "auto"}}>
 								<Form.Label>Name: <b>{ dairyInvoice.name }</b></Form.Label>
 							</Row>
@@ -342,23 +341,22 @@ class DairyInvoice extends React.Component {
 							</tbody>
 						</Table>
 				</div>
-				<br/>
-					<center>
-						<div id='hide-btn'>
-							<Button variant="primary" onClick={ this.downloadInvoice }>
-								Download
-							</Button>
-							&nbsp;&nbsp;
-							<Button variant="secondary" onClick={ this.toggleEdit }>
-								Edit
-							</Button>
-							&nbsp;&nbsp;&nbsp;
-							<Button variant="danger" onClick={ this.reset }>
-								Reset
-							</Button>
-							<br/><br/><br/><br/>
-						</div>
-					</center>
+				<center>
+					<div id='hide-btn'>
+						<Button variant="primary" onClick={ this.downloadInvoice }>
+							Download
+						</Button>
+						&nbsp;&nbsp;
+						<Button variant="secondary" onClick={ this.toggleEdit }>
+							Edit
+						</Button>
+						&nbsp;&nbsp;&nbsp;
+						<Button variant="danger" onClick={ this.reset }>
+							Reset
+						</Button>
+						<br/><br/>
+					</div>
+				</center>
 			</div>
   		);
 	}

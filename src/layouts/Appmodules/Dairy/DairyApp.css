@@ -1,7 +1,7 @@
 .dairy-invoice{
     margin: 2% 15% 2% 15%;
     border: 2px solid grey;
-    padding: 2%;
+    padding: 1% 1% 0.5% 1%;
 }
 
 @media only screen and (max-width: 600px) {
