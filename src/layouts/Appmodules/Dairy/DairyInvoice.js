@@ -162,9 +162,9 @@ class DairyInvoice extends React.Component {
 		window.print();
 		document.title = title
 
-		setTimeout(()=>{
-			document.getElementById("hide-btn").style.display = "block"; 
-		}, 1000);
+		window.onafterprint = function(){
+			document.getElementById("hide-btn").style.display = "block";
+		}
 	}
 
 	componentWillUnmount(){
@@ -174,8 +174,11 @@ class DairyInvoice extends React.Component {
 
 	reset = () =>{
 		localStorage.removeItem('prevState')
-		this.setState(this.getInitialState())
-		this.updateDaysInMonth()
+		this.setState(this.getInitialState(),
+		()=>{
+			this.updateDaysInMonth()
+		})
+		//this.updateDaysInMonth()
 	}
 
     render() {
