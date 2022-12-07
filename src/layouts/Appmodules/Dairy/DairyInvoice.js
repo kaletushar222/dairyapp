@@ -12,7 +12,7 @@ class DairyInvoice extends React.Component {
 			dairyInvoice :{
 				name: '',
 				month: month,
-				rate: 0,
+				rate: 45,
 				billNo: Math.round(Math.random()*1000),
 				billDate: moment().format("DD/MM/YYYY"),
 				year: '2022',
@@ -42,6 +42,11 @@ class DairyInvoice extends React.Component {
 		window.addEventListener('beforeunload', this.componentCleanup);
 	}
 
+	getMonthShort =()=>{
+		const { dairyInvoice } = this.state
+		const month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
+		return month[dairyInvoice.month];
+	}
 	componentCleanup = () =>{
 		const prevState = JSON.stringify(this.state)
 		localStorage.setItem("prevState", prevState)
@@ -158,7 +163,7 @@ class DairyInvoice extends React.Component {
 		const { dairyInvoice } = this.state
 		document.getElementById("hide-btn").style.display = "none"; 
 		let title = document.title
-		document.title = dairyInvoice.name+'-'+dairyInvoice.month+'-'+dairyInvoice.year		
+		document.title = dairyInvoice.name+'-'+this.getMonthShort()+'-'+dairyInvoice.year		
 		window.print();
 		document.title = title
 
