@@ -304,9 +304,9 @@ class DairyInvoice extends React.Component {
   		return (
 			<div>
 				<div className='dairy-invoice'>
-						<div className='border-div'>
+						<div>
 							<center>
-								<h1 style={{ borderBottom: "1px solid #e5e2e2" }}>SHRI DATTA DAIRY FARM</h1>
+								<h1>SHRI DATTA DAIRY FARM</h1>
 								<div>Datta Shinde | 7385063457 </div>
 							</center>
 							<Row style={{margin: "auto"}}>
@@ -319,7 +319,7 @@ class DairyInvoice extends React.Component {
 								<Form.Label>Rate(Rs.)/Ltr: <b>{ dairyInvoice.rate }</b>/-</Form.Label>
 							</Row>
 						</div>
-						<br/>
+						<hr/>
 						<Table striped bordered hover size="sm">
 							<thead>
 								<tr>
@@ -346,8 +346,8 @@ class DairyInvoice extends React.Component {
 							</tbody>
 						</Table>
 				</div>
-				<center>
-					<div id='hide-btn'>
+				<center id='hide-btn'>
+					<div>
 						<Button variant="primary" onClick={ this.downloadInvoice }>
 							Download
 						</Button>

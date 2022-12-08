@@ -1,7 +1,13 @@
 .dairy-invoice{
     margin: 2% 15% 2% 15%;
     border: 2px solid grey;
-    padding: 1% 1% 0.5% 1%;
+    padding: 0.5%;
+}
+h1 {
+    font-size: 2rem;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: grey;
 }
 
 @media only screen and (max-width: 600px) {
@@ -17,5 +23,13 @@
 
 .border-div{ 
     border: 1px solid black;
-    padding: 2%;
+    padding: 1%;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: grey; /* Modern Browsers */
 }
