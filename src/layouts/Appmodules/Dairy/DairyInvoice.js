@@ -304,7 +304,7 @@ class DairyInvoice extends React.Component {
   		return (
 			<div>
 				<div className='dairy-invoice'>
-						<div>
+						<div style={{ marginBottom:"8px" }}>
 							<center>
 								<h1>SHRI DATTA DAIRY FARM</h1>
 								<div>Datta Shinde | 7385063457 </div>
@@ -319,7 +319,6 @@ class DairyInvoice extends React.Component {
 								<Form.Label>Rate(Rs.)/Ltr: <b>{ dairyInvoice.rate }</b>/-</Form.Label>
 							</Row>
 						</div>
-						<hr/>
 						<Table striped bordered hover size="sm">
 							<thead>
 								<tr>
