@@ -15,7 +15,7 @@ class DairyInvoice extends React.Component {
 				rate: 45,
 				billNo: Math.round(Math.random()*1000),
 				billDate: moment().format("DD/MM/YYYY"),
-				year: '2022',
+				year: new Date().getFullYear(),
 				individualDayRates:[],
 				totalMilk: 0,
 				totalPrice: 0,
@@ -196,6 +196,9 @@ class DairyInvoice extends React.Component {
 	getEditView = () =>{
 		const { dairyInvoice } = this.state
 		let months = moment.months()
+		let currentYear = new Date().getFullYear();
+		let years = [currentYear-1, currentYear, currentYear+1]
+		
   		return (
 			<div>
 				<div className='dairy-invoice'>
@@ -220,8 +223,11 @@ class DairyInvoice extends React.Component {
 								<Col>
 									<Form.Label>Year: </Form.Label><br/>
 									<Form.Select value={dairyInvoice.year} name="year" onChange={this.handleDairyInvoiceMonthOrYear}> 
-										<option value="2022">2022</option>
-										<option value="2023">2023</option>
+										{
+											years.map((year, key)=>{
+												return <option key={key} value={year}>{year}</option> 	
+											})
+										}
 									</Form.Select>
 								</Col>
 							</Row>
