@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React from 'react';
-import { Button, Col, Form, ListGroupItem, Row, Table } from 'react-bootstrap';
+import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import './DairyApp.css';
 import Footer from './Components/Footer/Footer'
 
@@ -162,33 +162,15 @@ class DairyInvoice extends React.Component {
 
 	downloadInvoice = () => {
 		const { dairyInvoice } = this.state
-
+		document.getElementById("hide-btn").style.display = "none"; 
 		let title = document.title
-		let beforePrint = function() {
-			document.getElementById("hide-btn").style.display = "none"; 
-			document.title = dairyInvoice.name+'-'+this.getMonthShort()+'-'+dairyInvoice.year		
-		};
-	
-		let afterPrint = function() {
-			document.getElementById("hide-btn").style.display = "block"; 
-			document.title = title
-		};
-	
-		if (window.matchMedia) {
-			var mediaQueryList = window.matchMedia('print');
-			mediaQueryList.addListener(function(mql) {
-				if (mql.matches) {
-					beforePrint();
-				} else {
-					afterPrint();
-				}
-			});
-		}
-	
-		window.onbeforeprint = beforePrint;
-		window.onafterprint = afterPrint;
-
+		document.title = dairyInvoice.name+'-'+this.getMonthShort()+'-'+dairyInvoice.year		
 		window.print();
+		document.title = title
+
+		setTimeout(()=>{
+			document.getElementById("hide-btn").style.display = "block"; 
+		}, 1000);
 	}
 
 	componentWillUnmount(){
