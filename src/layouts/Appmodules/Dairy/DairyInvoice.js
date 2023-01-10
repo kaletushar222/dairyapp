@@ -2,6 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import './DairyApp.css';
+import Footer from './Components/Footer/Footer'
 
 class DairyInvoice extends React.Component {
     
@@ -298,7 +299,9 @@ class DairyInvoice extends React.Component {
 					<Button variant="danger" onClick={ this.reset }>
 						Reset
 					</Button>
-					<br/><br/><br/><br/>
+					<br/><br/>
+					<Footer/>
+					<br/><br/>
 				</center>
 			</div>
   		);
@@ -364,9 +367,13 @@ class DairyInvoice extends React.Component {
 						<Button variant="danger" onClick={ this.reset }>
 							Reset
 						</Button>
-						<br/><br/>
 					</div>
 				</center>
+				<br/>
+					<center>
+						<Footer/>
+					</center>
+				<br/>
 			</div>
   		);
 	}
