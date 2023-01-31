@@ -22,7 +22,8 @@ class DairyInvoice extends React.Component {
 				totalPrice: 0,
 				defaultQuantity: 0
 			},
-			isEditView: true
+			isEditView: true,
+			quantities: [0, 0.25,0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.50, 4.75, 5]
         }
 		return object
 	}
@@ -195,7 +196,7 @@ class DairyInvoice extends React.Component {
 	
 
 	getEditView = () =>{
-		const { dairyInvoice } = this.state
+		const { dairyInvoice, quantities } = this.state
 		let months = moment.months()
 		let currentYear = new Date().getFullYear();
 		let years = [currentYear-1, currentYear, currentYear+1]
@@ -241,14 +242,11 @@ class DairyInvoice extends React.Component {
 								<Col>
 									<Form.Label>Default Quantity </Form.Label>
 									<Form.Select name="quantity" value={dairyInvoice.defaultQuantity} onChange={ this.handleDefaultQuantityUpdate }> 
-										<option value="0">0</option>
-										<option value="0.25">0.25</option>
-										<option value="0.5">0.5</option>
-										<option value="1">1</option>
-										<option value="1.5">1.5</option>
-										<option value="2">2</option>
-										<option value="2.5">2.5</option>
-										<option value="3">3</option>
+										{
+											quantities.map((qty, index)=>{
+												return <option key={index} value={qty}>{qty}</option>
+											})
+										}
 									</Form.Select> &nbsp; Ltr
 								</Col>
 							</Row>
@@ -269,14 +267,11 @@ class DairyInvoice extends React.Component {
 											<td>{day.date}</td>
 											<td>
 												<Form.Select value={day.quantity} name="quantity" onChange={(event)=>{this.handleIndividualQuantityUpdate(event, index)}}> 
-													<option value="0">0</option>
-													<option value="0.25">0.25</option>
-													<option value="0.5">0.5</option>
-													<option value="1">1</option>
-													<option value="1.5">1.5</option>
-													<option value="2">2</option>
-													<option value="2.5">2.5</option>
-													<option value="3">3</option>
+													{
+														quantities.map((qty, index)=>{
+															return <option key={index} value={qty}>{qty}</option>
+														})
+													}
 												</Form.Select> &nbsp; Ltr
 											</td>
 											<td>{day.price}</td>
