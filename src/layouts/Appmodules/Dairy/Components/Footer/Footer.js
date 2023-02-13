@@ -1,6 +1,5 @@
 import React from 'react';
 import insta from './insta.png';
-import web from './web.png';
 
 class Footer extends React.Component {
 

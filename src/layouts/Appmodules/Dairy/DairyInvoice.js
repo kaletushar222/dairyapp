@@ -3,6 +3,7 @@ import React from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import './DairyApp.css';
 import Footer from './Components/Footer/Footer'
+import Plus from '../../../images/plus.png'
 
 class DairyInvoice extends React.Component {
     
@@ -23,7 +24,7 @@ class DairyInvoice extends React.Component {
 				defaultQuantity: 0
 			},
 			isEditView: true,
-			quantities: [0, 0.25,0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.50, 4.75, 5]
+			quantities: [0, 0.5, 1, 1.5, 2]
         }
 		return object
 	}
@@ -36,7 +37,6 @@ class DairyInvoice extends React.Component {
 	componentDidMount(){
 		this.updateDaysInMonth()
 		let prevState = localStorage.getItem("prevState")
-		console.log()
 		if(prevState){
 			prevState = JSON.parse(prevState)
 			this.setState(prevState)
@@ -50,6 +50,7 @@ class DairyInvoice extends React.Component {
 		return month[dairyInvoice.month];
 	}
 	componentCleanup = () =>{
+		delete this.state.quantities
 		const prevState = JSON.stringify(this.state)
 		localStorage.setItem("prevState", prevState)
 	}
@@ -179,6 +180,29 @@ class DairyInvoice extends React.Component {
         window.removeEventListener('beforeunload', this.componentCleanup);
 	}
 
+	handleCustomQty = (event) => {
+		let quantity = ''
+		if(event.target.value){
+			quantity = event.target.value.replace(/^0+/, '');
+		}
+		this.setState({
+			customQty: parseFloat(quantity)
+		})
+	}
+	addQuantity = () =>{
+		const { customQty, quantities } = this.state
+		if(!customQty || quantities.includes(customQty)){
+			return
+		}
+		quantities.push(customQty)
+		quantities.sort((a, b) => a - b);
+		this.setState({
+			customQty: 0,
+			quantities: quantities
+		})
+		console.log("added")
+	}
+
 	reset = () =>{
 		localStorage.removeItem('prevState')
 		this.setState(this.getInitialState(),
@@ -193,10 +217,9 @@ class DairyInvoice extends React.Component {
 		const renderUI = isEditView? this.getEditView():this.getPrintView()
 		return renderUI
 	}
-	
 
 	getEditView = () =>{
-		const { dairyInvoice, quantities } = this.state
+		const { dairyInvoice, quantities, customQty } = this.state
 		let months = moment.months()
 		let currentYear = new Date().getFullYear();
 		let years = [currentYear-1, currentYear, currentYear+1]
@@ -207,8 +230,7 @@ class DairyInvoice extends React.Component {
 						<div className='border-div'>
 							<center><h1>SHRI DATTA DAIRY FARM</h1></center>
 							<Row style={{margin: "auto"}}>
-									<Form.Label>Name: </Form.Label>
-									<Form.Control value={ dairyInvoice.name } type="text" placeholder="Enter Name" name="name" onChange={this.handleDairyInvoiceUpdate}/>
+								<Form.Control value={ dairyInvoice.name } type="text" placeholder="Enter Customer Name" name="name" onChange={this.handleDairyInvoiceUpdate}/>
 							</Row>
 							<br/>
 							<Row style={{margin: "auto"}}>
@@ -236,11 +258,7 @@ class DairyInvoice extends React.Component {
 							<br/>
 							<Row style={{margin: "auto"}}>
 								<Col>
-									<Form.Label>Rate(Rs.)/Ltr: </Form.Label>
-									<Form.Control value={ dairyInvoice.rate } type="text" placeholder="Enter Rate" name="rate" onChange={this.handleDairyInvoiceRate}/>
-								</Col>
-								<Col>
-									<Form.Label>Default Quantity </Form.Label>
+									<Form.Label style={{display: "block"}}>Default Quantity: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </Form.Label>
 									<Form.Select name="quantity" value={dairyInvoice.defaultQuantity} onChange={ this.handleDefaultQuantityUpdate }> 
 										{
 											quantities.map((qty, index)=>{
@@ -248,6 +266,19 @@ class DairyInvoice extends React.Component {
 											})
 										}
 									</Form.Select> &nbsp; Ltr
+								</Col>
+								<Col>
+									<Form.Label style={{display: "block"}}>Add Quantity: &nbsp; </Form.Label>
+									<Form.Control style={{width: "62%", display: "inline"}} value={ customQty } type="number" placeholder="Quantity" name="Custom Quantity" onChange={this.handleCustomQty}/>
+									&nbsp;&nbsp;&nbsp;	&nbsp;
+									<img onClick={this.addQuantity} height="28" width="28" src={Plus} alt="add" />
+								</Col>
+							</Row>
+							<br/>
+							<Row style={{margin: "auto"}}>
+								<Col>
+									<Form.Label>Rate(Rs.)/Ltr: </Form.Label>
+									<Form.Control value={ dairyInvoice.rate } type="text" placeholder="Enter Rate" name="rate" onChange={this.handleDairyInvoiceRate}/>
 								</Col>
 							</Row>
 						</div>
