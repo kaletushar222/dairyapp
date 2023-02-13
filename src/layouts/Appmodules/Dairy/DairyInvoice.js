@@ -20,10 +20,11 @@ class DairyInvoice extends React.Component {
 				individualDayRates:[],
 				totalMilk: 0,
 				totalPrice: 0,
-				defaultQuantity: 0
+				defaultQuantity: 0,
+				range: 0.5
 			},
 			isEditView: true,
-			quantities: [0, 0.25,0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.50, 4.75, 5]
+			quantities: this.getQuantity(0.5)
         }
 		return object
 	}
@@ -44,6 +45,16 @@ class DairyInvoice extends React.Component {
 		window.addEventListener('beforeunload', this.componentCleanup);
 	}
 
+	getQuantity = (range) =>{
+		let count = 0
+		let quantities = []
+		while(count<5){
+			count = count + range
+			quantities.push(count)
+		}
+		console.log("quantities : ",quantities)
+		return quantities
+	}
 	getMonthShort =()=>{
 		const { dairyInvoice } = this.state
 		const month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
@@ -136,6 +147,18 @@ class DairyInvoice extends React.Component {
 		})
 		this.calculateTotal(dairyInvoice)
 	}
+
+	handleQtyRangeUpdate = (event) =>{
+		const { dairyInvoice } = this.state
+		let range = parseFloat(event.target.value)
+		console.log("range : ", range)
+		this.setState({
+			quantities: this.getQuantity(range),
+			range: range
+		}, ()=>{
+			this.calculateTotal(dairyInvoice)
+		})
+	}
 	
 	toggleEdit = () =>{
 		const { isEditView } = this.state
@@ -196,19 +219,18 @@ class DairyInvoice extends React.Component {
 	
 
 	getEditView = () =>{
-		const { dairyInvoice, quantities } = this.state
+		const { dairyInvoice, quantities, range } = this.state
 		let months = moment.months()
 		let currentYear = new Date().getFullYear();
 		let years = [currentYear-1, currentYear, currentYear+1]
-		
+		console.log("edit view quanitties : ", quantities)
   		return (
 			<div>
 				<div className='dairy-invoice'>
 						<div className='border-div'>
 							<center><h1>SHRI DATTA DAIRY FARM</h1></center>
 							<Row style={{margin: "auto"}}>
-									<Form.Label>Name: </Form.Label>
-									<Form.Control value={ dairyInvoice.name } type="text" placeholder="Enter Name" name="name" onChange={this.handleDairyInvoiceUpdate}/>
+									<Form.Control value={ dairyInvoice.name } type="text" placeholder="Enter Customer Name" name="name" onChange={this.handleDairyInvoiceUpdate}/>
 							</Row>
 							<br/>
 							<Row style={{margin: "auto"}}>
@@ -236,11 +258,7 @@ class DairyInvoice extends React.Component {
 							<br/>
 							<Row style={{margin: "auto"}}>
 								<Col>
-									<Form.Label>Rate(Rs.)/Ltr: </Form.Label>
-									<Form.Control value={ dairyInvoice.rate } type="text" placeholder="Enter Rate" name="rate" onChange={this.handleDairyInvoiceRate}/>
-								</Col>
-								<Col>
-									<Form.Label>Default Quantity </Form.Label>
+									<Form.Label>Default Qty </Form.Label>
 									<Form.Select name="quantity" value={dairyInvoice.defaultQuantity} onChange={ this.handleDefaultQuantityUpdate }> 
 										{
 											quantities.map((qty, index)=>{
@@ -248,6 +266,20 @@ class DairyInvoice extends React.Component {
 											})
 										}
 									</Form.Select> &nbsp; Ltr
+								</Col>
+								<Col>
+									<Form.Label>Qty Range</Form.Label>
+									<Form.Range min="0.25" max="0.5" step="0.25" onChange={ this.handleQtyRangeUpdate } value={ range }/>
+								</Col>
+							</Row>
+							<br/>
+							<Row style={{margin: "auto"}}>
+								<Col>
+									<Form.Label>Rate(Rs.)/Ltr: </Form.Label>
+									<Form.Control value={ dairyInvoice.rate } type="text" placeholder="Enter Rate" name="rate" onChange={this.handleDairyInvoiceRate}/>
+								</Col>
+								<Col>
+									
 								</Col>
 							</Row>
 						</div>
