@@ -181,7 +181,7 @@ class DairyInvoice extends React.Component {
 	}
 
 	handleCustomQty = (event) => {
-		let quantity = ''
+		let quantity = 0
 		if(event.target.value){
 			quantity = event.target.value.replace(/^0+/, '');
 		}
@@ -191,11 +191,13 @@ class DairyInvoice extends React.Component {
 	}
 	addQuantity = () =>{
 		const { customQty, quantities } = this.state
+		console.log("aty : ", customQty )
 		if(!customQty || quantities.includes(customQty)){
 			return
 		}
 		quantities.push(customQty)
 		quantities.sort((a, b) => a - b);
+		console.log("quantities : ", quantities)
 		this.setState({
 			customQty: 0,
 			quantities: quantities
@@ -274,13 +276,15 @@ class DairyInvoice extends React.Component {
 									<img onClick={this.addQuantity} height="28" width="28" src={Plus} alt="add" />
 								</Col>
 							</Row>
-							<br/>
 							<Row style={{margin: "auto"}}>
 								<Col>
 									<Form.Label>Rate(Rs.)/Ltr: </Form.Label>
 									<Form.Control value={ dairyInvoice.rate } type="text" placeholder="Enter Rate" name="rate" onChange={this.handleDairyInvoiceRate}/>
 								</Col>
+								<Col>
+								</Col>
 							</Row>
+							<br/>
 						</div>
 						<br/>
 						<Table striped bordered hover size="sm">
