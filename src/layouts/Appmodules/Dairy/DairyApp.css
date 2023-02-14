@@ -25,3 +25,7 @@ h1 {
     border: 1px solid black;
     padding: 1%;
 }
+ 
+  .custom-button:active {
+    transform: translateY(1.5px);
+  }

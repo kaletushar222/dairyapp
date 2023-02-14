@@ -181,10 +181,7 @@ class DairyInvoice extends React.Component {
 	}
 
 	handleCustomQty = (event) => {
-		let quantity = 0
-		if(event.target.value){
-			quantity = event.target.value.replace(/^0+/, '');
-		}
+		let quantity = event.target.value
 		this.setState({
 			customQty: parseFloat(quantity)
 		})
@@ -193,7 +190,7 @@ class DairyInvoice extends React.Component {
 		const { customQty, quantities } = this.state
 		console.log("aty : ", customQty )
 		if(!customQty || quantities.includes(customQty)){
-			return
+			return alert("Quantity is already present")
 		}
 		quantities.push(customQty)
 		quantities.sort((a, b) => a - b);
@@ -232,7 +229,9 @@ class DairyInvoice extends React.Component {
 						<div className='border-div'>
 							<center><h1>SHRI DATTA DAIRY FARM</h1></center>
 							<Row style={{margin: "auto"}}>
-								<Form.Control value={ dairyInvoice.name } type="text" placeholder="Enter Customer Name" name="name" onChange={this.handleDairyInvoiceUpdate}/>
+								<Col>
+									<Form.Control value={ dairyInvoice.name } type="text" placeholder="Enter Customer Name" name="name" onChange={this.handleDairyInvoiceUpdate}/>
+								</Col>
 							</Row>
 							<br/>
 							<Row style={{margin: "auto"}}>
@@ -260,22 +259,23 @@ class DairyInvoice extends React.Component {
 							<br/>
 							<Row style={{margin: "auto"}}>
 								<Col>
-									<Form.Label style={{display: "block"}}>Default Quantity: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </Form.Label>
-									<Form.Select name="quantity" value={dairyInvoice.defaultQuantity} onChange={ this.handleDefaultQuantityUpdate }> 
+									<Form.Label style={{display: "block"}}>Default Qty:</Form.Label>
+									<Form.Select name="quantity" style={{display : "block"}} value={dairyInvoice.defaultQuantity} onChange={ this.handleDefaultQuantityUpdate }> 
 										{
 											quantities.map((qty, index)=>{
 												return <option key={index} value={qty}>{qty}</option>
 											})
 										}
-									</Form.Select> &nbsp; Ltr
+									</Form.Select>
 								</Col>
 								<Col>
-									<Form.Label style={{display: "block"}}>Add Quantity: &nbsp; </Form.Label>
+									<Form.Label style={{display: "block"}}>Add Qty: &nbsp; </Form.Label>
 									<Form.Control style={{width: "62%", display: "inline"}} value={ customQty } type="number" placeholder="Quantity" name="Custom Quantity" onChange={this.handleCustomQty}/>
 									&nbsp;&nbsp;&nbsp;	&nbsp;
-									<img onClick={this.addQuantity} height="28" width="28" src={Plus} alt="add" />
+									<img className='custom-button' role="button" onClick={this.addQuantity} height="28" width="28" src={Plus} alt="add" />
 								</Col>
 							</Row>
+							<br/>
 							<Row style={{margin: "auto"}}>
 								<Col>
 									<Form.Label>Rate(Rs.)/Ltr: </Form.Label>
@@ -307,7 +307,7 @@ class DairyInvoice extends React.Component {
 															return <option key={index} value={qty}>{qty}</option>
 														})
 													}
-												</Form.Select> &nbsp; Ltr
+												</Form.Select>
 											</td>
 											<td>{day.price}</td>
 										</tr>
