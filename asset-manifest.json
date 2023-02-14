@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/dairyapp/static/css/main.1aa34263.css",
-    "main.js": "/dairyapp/static/js/main.5e55574c.js",
+    "main.css": "/dairyapp/static/css/main.0b831c10.css",
+    "main.js": "/dairyapp/static/js/main.e4037982.js",
     "static/media/plus.png": "/dairyapp/static/media/plus.b3120687d3118e5ed136.png",
     "index.html": "/dairyapp/index.html",
-    "main.1aa34263.css.map": "/dairyapp/static/css/main.1aa34263.css.map",
-    "main.5e55574c.js.map": "/dairyapp/static/js/main.5e55574c.js.map"
+    "main.0b831c10.css.map": "/dairyapp/static/css/main.0b831c10.css.map",
+    "main.e4037982.js.map": "/dairyapp/static/js/main.e4037982.js.map"
   },
   "entrypoints": [
-    "static/css/main.1aa34263.css",
-    "static/js/main.5e55574c.js"
+    "static/css/main.0b831c10.css",
+    "static/js/main.e4037982.js"
   ]
 }
