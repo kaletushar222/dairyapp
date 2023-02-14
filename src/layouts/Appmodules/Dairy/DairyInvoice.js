@@ -3,7 +3,8 @@ import React from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import './DairyApp.css';
 import Footer from './Components/Footer/Footer'
-import Plus from '../../../images/plus.png'
+import PlusIcon from '../../../images/plus.png'
+import BuffaloImage from '../../../images/buffalo.png'
 
 class DairyInvoice extends React.Component {
     
@@ -272,7 +273,7 @@ class DairyInvoice extends React.Component {
 									<Form.Label style={{display: "block"}}>Add Qty: &nbsp; </Form.Label>
 									<Form.Control style={{width: "62%", display: "inline"}} value={ customQty } type="number" placeholder="Quantity" name="Custom Quantity" onChange={this.handleCustomQty}/>
 									&nbsp;&nbsp;&nbsp;	&nbsp;
-									<img className='custom-button' role="button" onClick={this.addQuantity} height="28" width="28" src={Plus} alt="add" />
+									<img className='custom-button' role="button" onClick={this.addQuantity} height="28" width="28" src={PlusIcon} alt="add" />
 								</Col>
 							</Row>
 							<br/>
@@ -348,15 +349,23 @@ class DairyInvoice extends React.Component {
 								<h1>SHRI DATTA DAIRY FARM</h1>
 								<div>Datta Shinde | 7385063457 </div>
 							</center>
-							<Row style={{margin: "auto"}}>
-								<Form.Label>Name: <b>{ dairyInvoice.name }</b></Form.Label>
-							</Row>
-							<Row style={{margin: "auto"}}>
-								<Form.Label>Month: <b>{months[dairyInvoice.month] +'-'+dairyInvoice.year}</b></Form.Label><br/>
-							</Row>
-							<Row style={{margin: "auto"}}>
-								<Form.Label>Rate(Rs.)/Ltr: <b>{ dairyInvoice.rate }</b>/-</Form.Label>
-							</Row>
+							<div style={{width: "100%", display: "flex"}}>
+								<div style={{width: "70%"}}>
+									<Row style={{margin: "auto"}}>
+										<Form.Label>Name: <b>{ dairyInvoice.name }</b></Form.Label>
+									</Row>
+									<Row style={{margin: "auto"}}>
+										<Form.Label>Month: <b>{months[dairyInvoice.month] +'-'+dairyInvoice.year}</b></Form.Label><br/>
+									</Row>
+									<Row style={{margin: "auto"}}>
+										<Form.Label>Rate(Rs.)/Ltr: <b>{ dairyInvoice.rate }</b>/-</Form.Label>
+									</Row>
+								</div>
+								<div style={{width: "30%"}}>
+									<img height="90" width="90" style={{float: "right"}} src={BuffaloImage} alt="Buffalo" />
+								</div>
+							</div>
+							
 						</div>
 						<Table striped bordered hover size="sm">
 							<thead>
