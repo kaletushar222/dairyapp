@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import './DairyApp.css';
 import Footer from './Components/Footer/Footer'
-import PlusIcon from '../../../images/plus.png'
+import ForwardIcon from '../../../images/forward.png'
 import BuffaloImage from '../../../images/buffalo.png'
 
 class DairyInvoice extends React.Component {
@@ -260,6 +260,11 @@ class DairyInvoice extends React.Component {
 							<br/>
 							<Row style={{margin: "auto"}}>
 								<Col>
+									<Form.Label style={{display: "block"}}>Add Qty: &nbsp; </Form.Label>
+									<Form.Control style={{width: "62%", display: "inline"}} value={ customQty } type="number" placeholder="Quantity" name="Custom Quantity" onChange={this.handleCustomQty}/>
+									<img className='custom-button' role="button" onClick={this.addQuantity} height="28" width="28" src={ForwardIcon} alt="add" />
+								</Col>
+								<Col>
 									<Form.Label style={{display: "block"}}>Default Qty:</Form.Label>
 									<Form.Select name="quantity" style={{display : "block"}} value={dairyInvoice.defaultQuantity} onChange={ this.handleDefaultQuantityUpdate }> 
 										{
@@ -268,12 +273,6 @@ class DairyInvoice extends React.Component {
 											})
 										}
 									</Form.Select>
-								</Col>
-								<Col>
-									<Form.Label style={{display: "block"}}>Add Qty: &nbsp; </Form.Label>
-									<Form.Control style={{width: "62%", display: "inline"}} value={ customQty } type="number" placeholder="Quantity" name="Custom Quantity" onChange={this.handleCustomQty}/>
-									&nbsp;&nbsp;&nbsp;	&nbsp;
-									<img className='custom-button' role="button" onClick={this.addQuantity} height="28" width="28" src={PlusIcon} alt="add" />
 								</Col>
 							</Row>
 							<br/>
@@ -347,8 +346,9 @@ class DairyInvoice extends React.Component {
 						<div style={{ marginBottom:"8px" }}>
 							<center>
 								<h1>SHRI DATTA DAIRY FARM</h1>
-								<div>Datta Shinde | 7385063457 </div>
+								<div className='owner'>Datta Shinde | 7385063457 </div>
 							</center>
+							<br/>
 							<div style={{width: "100%", display: "flex"}}>
 								<div style={{width: "70%"}}>
 									<Row style={{margin: "auto"}}>

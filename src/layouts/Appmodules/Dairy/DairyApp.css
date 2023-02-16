@@ -4,16 +4,19 @@
     padding: 0.5% 1%;
 }
 h1 {
-    font-size: 2rem;
-    text-decoration-line: underline;
+    font-size: 1.3rem;
     text-decoration-thickness: 1px;
     text-decoration-color: grey;
+    margin-bottom: 0px;
+}
+
+.owner {
+    font-size: 12px;
 }
 
 @media only screen and (max-width: 600px) {
     h1 {
-        font-size: 22px;
-        padding-bottom: 2%;
+        font-size: 22px;    
     }
     .dairy-invoice{
         margin: 3%;
@@ -24,6 +27,11 @@ h1 {
 .border-div{ 
     border: 1px solid black;
     padding: 1%;
+}
+
+.custom-button {
+    margin-left: 14%;
+    border-radius: 50%;
 }
  
   .custom-button:active {
