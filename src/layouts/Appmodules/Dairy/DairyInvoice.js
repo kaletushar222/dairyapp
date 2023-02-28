@@ -173,7 +173,7 @@ class DairyInvoice extends React.Component {
 
 		setTimeout(()=>{
 			document.getElementById("hide-btn").style.display = "block"; 
-		}, 1000);
+		}, 2000);
 	}
 
 	componentWillUnmount(){
@@ -362,7 +362,7 @@ class DairyInvoice extends React.Component {
 									</Row>
 								</div>
 								<div style={{width: "30%"}}>
-									<img height="90" width="90" style={{float: "right"}} src={BuffaloImage} alt="Buffalo" />
+									<img height="60" width="60" style={{float: "right"}} src={BuffaloImage} alt="Buffalo" />
 								</div>
 							</div>
 							
