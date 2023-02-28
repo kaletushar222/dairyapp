@@ -37,3 +37,7 @@ h1 {
   .custom-button:active {
     transform: translateY(1.5px);
   }
+
+.small-font {
+    font-size: 10px;
+}

@@ -228,7 +228,6 @@ class DairyInvoice extends React.Component {
 			<div>
 				<div className='dairy-invoice'>
 						<div className='border-div'>
-							<center><h1>SHRI DATTA DAIRY FARM</h1></center>
 							<Row style={{margin: "auto"}}>
 								<Col>
 									<Form.Control value={ dairyInvoice.name } type="text" placeholder="Enter Customer Name" name="name" onChange={this.handleDairyInvoiceUpdate}/>
@@ -342,7 +341,7 @@ class DairyInvoice extends React.Component {
 		let months = moment.months()
   		return (
 			<div>
-				<div className='dairy-invoice'>
+				<div className='dairy-invoice small-font'>
 						<div style={{ marginBottom:"8px" }}>
 							<center>
 								<h1>SHRI DATTA DAIRY FARM</h1>
