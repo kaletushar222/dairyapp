@@ -44,6 +44,10 @@ class DairyInvoice extends React.Component {
 			this.setState(prevState)
 		}
 		window.addEventListener('beforeunload', this.componentCleanup);
+
+		window.onafterprint = function(){
+			$("#hide-btn").show()
+		 }
 	}
 
 	getMonthShort =()=>{
@@ -166,13 +170,10 @@ class DairyInvoice extends React.Component {
 
 	downloadInvoice = () => {
 		const { dairyInvoice } = this.state
-		document.getElementById("hide-btn").style.display = "none"; 
 		$("#hide-btn").hide()
 		let title = document.title
 		document.title = dairyInvoice.name+'-'+this.getMonthShort()+'-'+dairyInvoice.year	
-		setTimeout(()=>{
-			window.print();
-		}, 1000);	
+		window.print();
 		document.title = title
 	}
 
