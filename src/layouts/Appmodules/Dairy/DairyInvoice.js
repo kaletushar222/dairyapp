@@ -5,6 +5,7 @@ import './DairyApp.css';
 import Footer from './Components/Footer/Footer'
 import ForwardIcon from '../../../images/forward.png'
 import BuffaloImage from '../../../images/buffalo.png'
+import $ from "jquery";
 
 class DairyInvoice extends React.Component {
     
@@ -166,14 +167,14 @@ class DairyInvoice extends React.Component {
 	downloadInvoice = () => {
 		const { dairyInvoice } = this.state
 		document.getElementById("hide-btn").style.display = "none"; 
+		$("#hide-btn").hide()
 		let title = document.title
-		document.title = dairyInvoice.name+'-'+this.getMonthShort()+'-'+dairyInvoice.year		
-		window.print();
-		document.title = title
-
+		document.title = dairyInvoice.name+'-'+this.getMonthShort()+'-'+dairyInvoice.year	
 		setTimeout(()=>{
-			document.getElementById("hide-btn").style.display = "block"; 
-		}, 2000);
+			window.print();
+			$("#hide-btn").show()
+		}, 1000);	
+		document.title = title
 	}
 
 	componentWillUnmount(){
@@ -350,19 +351,21 @@ class DairyInvoice extends React.Component {
 							</center>
 							<br/>
 							<div style={{width: "100%", display: "flex"}}>
-								<div style={{width: "70%"}}>
+								<div style={{width: "80%"}}>
 									<Row style={{margin: "auto"}}>
 										<Form.Label>Name: <b>{ dairyInvoice.name }</b></Form.Label>
 									</Row>
 									<Row style={{margin: "auto"}}>
-										<Form.Label>Month: <b>{months[dairyInvoice.month] +'-'+dairyInvoice.year}</b></Form.Label><br/>
-									</Row>
-									<Row style={{margin: "auto"}}>
-										<Form.Label>Rate(Rs.)/Ltr: <b>{ dairyInvoice.rate }</b>/-</Form.Label>
+										<Col>
+											<Form.Label>Month: <b>{months[dairyInvoice.month] +'-'+dairyInvoice.year}</b></Form.Label><br/>
+										</Col>
+										<Col>
+											<Form.Label>Rate/Ltr: <b>{ dairyInvoice.rate }</b>/-</Form.Label>
+										</Col>
 									</Row>
 								</div>
-								<div style={{width: "30%"}}>
-									<img height="60" width="60" style={{float: "right"}} src={BuffaloImage} alt="Buffalo" />
+								<div style={{width: "20%"}}>
+									<img height="40" width="40" style={{float: "right"}} src={BuffaloImage} alt="Buffalo" />
 								</div>
 							</div>
 							
