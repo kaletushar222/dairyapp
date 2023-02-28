@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Dairy App",
+  "name": "Dairy invoice generator",
   "icons": [
     {
       "src": "favicon.ico",
