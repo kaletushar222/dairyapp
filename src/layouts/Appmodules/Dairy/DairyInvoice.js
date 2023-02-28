@@ -172,7 +172,6 @@ class DairyInvoice extends React.Component {
 		document.title = dairyInvoice.name+'-'+this.getMonthShort()+'-'+dairyInvoice.year	
 		setTimeout(()=>{
 			window.print();
-			$("#hide-btn").show()
 		}, 1000);	
 		document.title = title
 	}
