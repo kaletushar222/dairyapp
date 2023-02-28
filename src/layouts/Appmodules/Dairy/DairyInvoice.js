@@ -157,7 +157,7 @@ class DairyInvoice extends React.Component {
 		})
 		totalPrice = Math.round(parseFloat(totalPrice))
 		dairyInvoice['totalPrice'] = totalPrice
-		dairyInvoice['totalMilk'] = totalMilk
+		dairyInvoice['totalMilk'] = parseFloat(totalMilk.toFixed(2))
 		this.setState({
 			dairyInvoice: dairyInvoice
 		})
@@ -230,6 +230,7 @@ class DairyInvoice extends React.Component {
 						<div className='border-div'>
 							<Row style={{margin: "auto"}}>
 								<Col>
+									<Form.Label>Customer Name: </Form.Label><br/>
 									<Form.Control value={ dairyInvoice.name } type="text" placeholder="Enter Customer Name" name="name" onChange={this.handleDairyInvoiceUpdate}/>
 								</Col>
 							</Row>
@@ -278,7 +279,7 @@ class DairyInvoice extends React.Component {
 							<Row style={{margin: "auto"}}>
 								<Col>
 									<Form.Label>Rate(Rs.)/Ltr: </Form.Label>
-									<Form.Control value={ dairyInvoice.rate } type="text" placeholder="Enter Rate" name="rate" onChange={this.handleDairyInvoiceRate}/>
+									<Form.Control value={ dairyInvoice.rate } type="number" placeholder="Enter Rate" name="rate" onChange={this.handleDairyInvoiceRate}/>
 								</Col>
 								<Col>
 								</Col>
