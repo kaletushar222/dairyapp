@@ -23,7 +23,10 @@ class DairyInvoice extends React.Component {
 				individualDayRates:[],
 				totalMilk: 0,
 				totalPrice: 0,
-				defaultQuantity: 0
+				defaultQuantity: 0,
+				isAdvance : false,
+				balanceAmount : 0,
+				totalPayable: 0
 			},
 			isEditView: true,
 			quantities: [0, 0.5, 1, 1.5, 2]
@@ -84,7 +87,6 @@ class DairyInvoice extends React.Component {
 		let rate = 0
 		if(event.target.value){
 			rate = parseFloat(event.target.value, 10);
-			console.log("rate : ", rate)
 		}
 		dairyInvoice[event.target.name] = parseFloat(rate)
 		this.setState({
@@ -92,6 +94,8 @@ class DairyInvoice extends React.Component {
         }, ()=>{
 			this.calculateTotal(dairyInvoice)
 		})
+
+		$("#rate-input").val(rate)
 	}
 
 	updateDaysInMonth = () => {
@@ -154,6 +158,7 @@ class DairyInvoice extends React.Component {
 	calculateTotal = (dairyInvoice) =>{
 		let totalPrice = 0
 		let totalMilk = 0
+
 		dairyInvoice.individualDayRates.forEach((object, index)=>{
 			const price = parseFloat(parseFloat(parseFloat(dairyInvoice.rate) * object.quantity).toFixed(2))
 			dairyInvoice.individualDayRates[index]["price"] = price
@@ -163,6 +168,14 @@ class DairyInvoice extends React.Component {
 		totalPrice = Math.round(parseFloat(totalPrice))
 		dairyInvoice['totalPrice'] = totalPrice
 		dairyInvoice['totalMilk'] = parseFloat(totalMilk.toFixed(2))
+
+		if(dairyInvoice.isAdvance){
+			dairyInvoice['totalPayable'] = parseFloat((dairyInvoice.totalPrice - dairyInvoice.balanceAmount).toFixed(2))
+		}
+		else{
+			dairyInvoice['totalPayable'] = parseFloat((dairyInvoice.totalPrice + dairyInvoice.balanceAmount).toFixed(2))
+		}
+
 		this.setState({
 			dairyInvoice: dairyInvoice
 		})
@@ -190,18 +203,34 @@ class DairyInvoice extends React.Component {
 	}
 	addQuantity = () =>{
 		const { customQty, quantities } = this.state
-		console.log("aty : ", customQty )
 		if(!customQty || quantities.includes(customQty)){
 			return alert("Quantity is already present")
 		}
 		quantities.push(customQty)
 		quantities.sort((a, b) => a - b);
-		console.log("quantities : ", quantities)
 		this.setState({
 			customQty: 0,
 			quantities: quantities
 		})
-		console.log("added")
+	}
+
+	handleSwitch = (event) =>{
+		const { dairyInvoice } = this.state
+		dairyInvoice.isAdvance = !dairyInvoice.isAdvance
+		this.calculateTotal(dairyInvoice)
+	}
+
+	handleDairyInvoiceBalanceAmount = (event) =>{
+		const { dairyInvoice } = this.state
+		
+		let balanceAmount = 0 
+		if(event.target.value){
+			balanceAmount = parseFloat(event.target.value)
+		}
+		balanceAmount = parseFloat(balanceAmount.toFixed(2))
+		dairyInvoice[event.target.name] = parseFloat(balanceAmount)
+		this.calculateTotal(dairyInvoice)
+		$("#balanceAmount").val(balanceAmount)
 	}
 
 	reset = () =>{
@@ -220,7 +249,8 @@ class DairyInvoice extends React.Component {
 	}
 
 	getEditView = () =>{
-		const { dairyInvoice, quantities, customQty } = this.state
+		const { dairyInvoice, quantities, customQty, isAdvance } = this.state
+		console.log("dairyInvoice : ", dairyInvoice)
 		let months = moment.months()
 		let currentYear = new Date().getFullYear();
 		let years = [currentYear-1, currentYear, currentYear+1]
@@ -278,11 +308,23 @@ class DairyInvoice extends React.Component {
 							</Row>
 							<br/>
 							<Row style={{margin: "auto"}}>
-								<Col>
-									<Form.Label>Rate(Rs.)/Ltr: </Form.Label>
-									<Form.Control value={ dairyInvoice.rate } type="number" placeholder="Enter Rate" name="rate" onChange={this.handleDairyInvoiceRate}/>
+								<Col xs="2">
+									<Form.Label>B/A</Form.Label>
+									<Form.Check 
+										type="switch"
+										id="custom-switch"
+										checked={dairyInvoice.isAdvance}
+										onChange={this.handleSwitch}
+									/>
 								</Col>
-								<Col>
+								<Col xs="5">
+									<Form.Label> { dairyInvoice.isAdvance?"Advance" : "Balance" } </Form.Label>
+									<Form.Control value={ dairyInvoice.balanceAmount } type="number" placeholder={ dairyInvoice.isAdvance?"Advance" : "Balance" } id="balanceAmount" name="balanceAmount" onChange={this.handleDairyInvoiceBalanceAmount}/>
+								</Col>
+
+								<Col xs="5">
+									<Form.Label>Rate(Rs.)/Ltr: </Form.Label>
+									<Form.Control value={ dairyInvoice.rate } type="number" placeholder="Enter Rate" name="rate" id="rate-input" onChange={this.handleDairyInvoiceRate}/>
 								</Col>
 							</Row>
 							<br/>
@@ -310,17 +352,34 @@ class DairyInvoice extends React.Component {
 													}
 												</Form.Select>
 											</td>
-											<td>{day.price}</td>
+											<td style={{textAlign: "right"}}>{day.price}</td>
 										</tr>
 									})
 								}
 								<tr>
 									<td><b>Total</b></td>
 									<td><b>{ dairyInvoice.totalMilk }</b> Ltr</td>
-									<td>Rs. <b>{ dairyInvoice.totalPrice }</b> /-</td>
+									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPrice }</b></td>
 								</tr>
+								{
+									dairyInvoice.balanceAmount &&
+									<>
+										<tr>
+											<td></td>
+											<td>{ dairyInvoice.isAdvance ? "Previous Advance" : "Previous Balance"}</td>
+											<td style={{textAlign: "right"}}>{ dairyInvoice.isAdvance ? "-" : "+"} { dairyInvoice.balanceAmount }</td>
+										</tr>
+										<tr>
+											<td></td>
+											<td><b>Total Payable</b></td>
+											<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPayable }</b></td>
+										</tr>
+									</>
+
+								}
 							</tbody>
 						</Table>
+						<br/>
 				</div>
 				<center>
 					<Button variant="primary" onClick={ this.toggleEdit }>
@@ -343,7 +402,7 @@ class DairyInvoice extends React.Component {
 		let months = moment.months()
   		return (
 			<div>
-				<div className='dairy-invoice small-font'>
+				<div className='dairy-invoice'>
 						<div style={{ marginBottom:"8px" }}>
 							<center>
 								<h1>SHRI DATTA DAIRY FARM</h1>
@@ -370,12 +429,12 @@ class DairyInvoice extends React.Component {
 							</div>
 							
 						</div>
-						<Table striped bordered hover size="sm">
+						<Table bordered size="sm">
 							<thead>
 								<tr>
 									<th>Date</th>
-									<th>Quantity</th>
-									<th>Price</th>
+									<th>Quantity (Ltr)</th>
+									<th>Price (Rs.)</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -384,15 +443,31 @@ class DairyInvoice extends React.Component {
 										return <tr key={index}>
 											<td>{day.date}</td>
 											<td>{day.quantity}</td>
-											<td>{day.price}</td>
+											<td style={{textAlign: "right"}}>{day.price}</td>
 										</tr>
 									})
 								}
 								<tr>
 									<td><b>Total</b></td>
 									<td><b>{ dairyInvoice.totalMilk }</b> Ltr</td>
-									<td>Rs. <b>{ dairyInvoice.totalPrice }</b> /-</td>
+									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPrice }</b></td>
 								</tr>
+								{
+									dairyInvoice.balanceAmount &&
+									<>
+										<tr>
+											<td></td>
+											<td>{ dairyInvoice.isAdvance ? "Previous Advance" : "Previous Balance"}</td>
+											<td style={{textAlign: "right"}}>{ dairyInvoice.isAdvance ? "-" : "+"} { dairyInvoice.balanceAmount }</td>
+										</tr>
+										<tr>
+											<td></td>
+											<td><b>Total Payable (Rs.)</b></td>
+											<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPayable }</b></td>
+										</tr>
+									</>
+
+								}
 							</tbody>
 						</Table>
 				</div>

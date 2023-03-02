@@ -42,11 +42,7 @@ h1 {
     font-size: 10px;
 }
 
-@media print {
-    html, body {
-       border: 1px solid white;
-       height: 99%;
-       page-break-after: avoid;
-       page-break-before: avoid;
-    }
+#custom-switch:checked {
+    background-color: #33b7d3;
+    border-color: #33b7d3;
 }
