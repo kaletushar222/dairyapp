@@ -11,7 +11,9 @@ class DairyInvoice extends React.Component {
     
 	getInitialState = () =>{
 		const d = new Date();
+		d.setMonth(d.getMonth() - 1);
 		let month = d.getMonth();
+
 		let object = {
 			dairyInvoice :{
 				name: '',
@@ -362,7 +364,7 @@ class DairyInvoice extends React.Component {
 									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPrice }</b></td>
 								</tr>
 								{
-									dairyInvoice.balanceAmount &&
+									dairyInvoice.balanceAmount ?
 									<>
 										<tr>
 											<td></td>
@@ -374,7 +376,8 @@ class DairyInvoice extends React.Component {
 											<td><b>Total Payable</b></td>
 											<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPayable }</b></td>
 										</tr>
-									</>
+									</> 
+									: <></>
 
 								}
 							</tbody>
@@ -442,7 +445,7 @@ class DairyInvoice extends React.Component {
 									dairyInvoice.individualDayRates.map((day, index)=>{
 										return <tr key={index}>
 											<td>{day.date}</td>
-											<td>{day.quantity}</td>
+											<td style={{textAlign: "right"}}>{day.quantity}</td>
 											<td style={{textAlign: "right"}}>{day.price}</td>
 										</tr>
 									})
@@ -453,7 +456,7 @@ class DairyInvoice extends React.Component {
 									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPrice }</b></td>
 								</tr>
 								{
-									dairyInvoice.balanceAmount &&
+									dairyInvoice.balanceAmount ?
 									<>
 										<tr>
 											<td></td>
@@ -466,6 +469,7 @@ class DairyInvoice extends React.Component {
 											<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPayable }</b></td>
 										</tr>
 									</>
+									: <></>
 
 								}
 							</tbody>
