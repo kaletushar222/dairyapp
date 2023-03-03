@@ -46,3 +46,8 @@ h1 {
     background-color: #33b7d3;
     border-color: #33b7d3;
 }
+
+#cancel-switch:checked {
+    background-color: #be635c;
+    border-color: #ffffff;
+}

@@ -22,7 +22,7 @@ class DairyInvoice extends React.Component {
 				billNo: Math.round(Math.random()*1000),
 				billDate: moment().format("DD/MM/YYYY"),
 				year: new Date().getFullYear(),
-				individualDayRates:[],
+				individualProducts:[],
 				totalMilk: 0,
 				totalPrice: 0,
 				defaultQuantity: 0,
@@ -120,20 +120,10 @@ class DairyInvoice extends React.Component {
 			daysInMonth--
 		}
 
-		dairyInvoice['individualDayRates'] = days
+		dairyInvoice['individualProducts'] = days
 
 		this.setState({
 			dairyInvoice: dairyInvoice
-		})
-	}
-
-	handleIndividualQuantityUpdate = (event, index) =>{
-		const { dairyInvoice } = this.state
-		dairyInvoice.individualDayRates[index]["quantity"] = parseFloat(event.target.value)
-		this.setState({
-			dairyInvoice: dairyInvoice
-		}, ()=>{
-			this.calculateTotal(dairyInvoice)
 		})
 	}
 
@@ -144,8 +134,8 @@ class DairyInvoice extends React.Component {
 			quantity = parseFloat(event.target.value)
 		}
 		dairyInvoice['defaultQuantity'] = quantity
-		dairyInvoice.individualDayRates.forEach((object, key)=>{
-			dairyInvoice.individualDayRates[key]['quantity'] = quantity
+		dairyInvoice.individualProducts.forEach((object, key)=>{
+			dairyInvoice.individualProducts[key]['quantity'] = quantity
 		})
 		this.calculateTotal(dairyInvoice)
 	}
@@ -161,11 +151,13 @@ class DairyInvoice extends React.Component {
 		let totalPrice = 0
 		let totalMilk = 0
 
-		dairyInvoice.individualDayRates.forEach((object, index)=>{
-			const price = parseFloat(parseFloat(parseFloat(dairyInvoice.rate) * object.quantity).toFixed(2))
-			dairyInvoice.individualDayRates[index]["price"] = price
-			totalPrice = totalPrice + price
-			totalMilk = totalMilk + object.quantity
+		dairyInvoice.individualProducts.forEach((object, index)=>{
+			if(!object.isCancelled){
+				const price = parseFloat(parseFloat(parseFloat(dairyInvoice.rate) * object.quantity).toFixed(2))
+				dairyInvoice.individualProducts[index]["price"] = price
+				totalPrice = totalPrice + price
+				totalMilk = totalMilk + object.quantity
+			}
 		})
 		totalPrice = Math.round(parseFloat(totalPrice))
 		dairyInvoice['totalPrice'] = totalPrice
@@ -216,7 +208,7 @@ class DairyInvoice extends React.Component {
 		})
 	}
 
-	handleSwitch = (event) =>{
+	handleBalanceAmountSwitch = (event) =>{
 		const { dairyInvoice } = this.state
 		dairyInvoice.isAdvance = !dairyInvoice.isAdvance
 		this.calculateTotal(dairyInvoice)
@@ -233,6 +225,18 @@ class DairyInvoice extends React.Component {
 		dairyInvoice[event.target.name] = parseFloat(balanceAmount)
 		this.calculateTotal(dairyInvoice)
 		$("#balanceAmount").val(balanceAmount)
+	}
+
+	handleIndividualProductUpdate = (event, index) =>{
+		const { dairyInvoice } = this.state
+		dairyInvoice.individualProducts[index][event.target.name] = parseFloat(event.target.value)
+		this.calculateTotal(dairyInvoice)
+	}
+
+	cancelIndividualProduct = (event, index) =>{
+		const { dairyInvoice } = this.state
+		dairyInvoice.individualProducts[index][event.target.name] = event.target.checked
+		this.calculateTotal(dairyInvoice)
 	}
 
 	reset = () =>{
@@ -316,7 +320,7 @@ class DairyInvoice extends React.Component {
 										type="switch"
 										id="custom-switch"
 										checked={dairyInvoice.isAdvance}
-										onChange={this.handleSwitch}
+										onChange={this.handleBalanceAmountSwitch}
 									/>
 								</Col>
 								<Col xs="5">
@@ -342,11 +346,11 @@ class DairyInvoice extends React.Component {
 							</thead>
 							<tbody>
 								{
-									dairyInvoice.individualDayRates.map((day, index)=>{
+									dairyInvoice.individualProducts.map((product, index)=>{
 										return <tr key={index}>
-											<td>{day.date}</td>
+											<td style={{textDecoration: product.isCancelled?"line-through":"none" }}>{product.date}</td>
 											<td>
-												<Form.Select value={day.quantity} name="quantity" onChange={(event)=>{this.handleIndividualQuantityUpdate(event, index)}}> 
+												<Form.Select value={product.quantity} name="quantity" onChange={(event)=>{this.handleIndividualProductUpdate(event, index)}}> 
 													{
 														quantities.map((qty, index)=>{
 															return <option key={index} value={qty}>{qty}</option>
@@ -354,14 +358,24 @@ class DairyInvoice extends React.Component {
 													}
 												</Form.Select>
 											</td>
-											<td style={{textAlign: "right"}}>{day.price}</td>
+											<td style={{textAlign: "right", textDecoration: product.isCancelled?"line-through":"none" }}>{product.price}</td>
+											<td>
+												<Form.Check 
+													name="isCancelled"
+													type="switch"
+													id="cancel-switch"
+													checked={product.isCancelled}
+													onChange={(event)=>{this.cancelIndividualProduct(event, index)}}
+												/>
+											</td>
 										</tr>
 									})
 								}
 								<tr>
 									<td><b>Total</b></td>
-									<td><b>{ dairyInvoice.totalMilk }</b> Ltr</td>
+									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalMilk }</b> Ltr</td>
 									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPrice }</b></td>
+									<td></td>
 								</tr>
 								{
 									dairyInvoice.balanceAmount ?
@@ -442,17 +456,17 @@ class DairyInvoice extends React.Component {
 							</thead>
 							<tbody>
 								{
-									dairyInvoice.individualDayRates.map((day, index)=>{
-										return <tr key={index}>
-											<td>{day.date}</td>
-											<td style={{textAlign: "right"}}>{day.quantity}</td>
-											<td style={{textAlign: "right"}}>{day.price}</td>
+									dairyInvoice.individualProducts.map((product, index)=>{
+										return <tr key={index} style={{textDecoration: product.isCancelled?"line-through":"none"}} >
+											<td>{product.date}</td>
+											<td style={{textAlign: "right"}}>{product.quantity}</td>
+											<td style={{textAlign: "right"}}>{product.price}</td>
 										</tr>
 									})
 								}
 								<tr>
 									<td><b>Total</b></td>
-									<td><b>{ dairyInvoice.totalMilk }</b> Ltr</td>
+									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalMilk }</b> Ltr</td>
 									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPrice }</b></td>
 								</tr>
 								{
