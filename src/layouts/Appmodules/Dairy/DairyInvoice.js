@@ -342,6 +342,7 @@ class DairyInvoice extends React.Component {
 									<th>Date</th>
 									<th>Quantity</th>
 									<th>Price</th>
+									<th>Cancel</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -452,6 +453,7 @@ class DairyInvoice extends React.Component {
 									<th>Date</th>
 									<th>Quantity (Ltr)</th>
 									<th>Price (Rs.)</th>
+									<th>Cancel</th>
 								</tr>
 							</thead>
 							<tbody>
