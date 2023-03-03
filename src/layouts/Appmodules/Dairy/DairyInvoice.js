@@ -359,7 +359,7 @@ class DairyInvoice extends React.Component {
 													}
 												</Form.Select>
 											</td>
-											<td style={{textAlign: "right", textDecoration: product.isCancelled?"line-through":"none" }}>{product.price}</td>
+											<td style={{ textDecoration: product.isCancelled?"line-through":"none" }}>{product.price}</td>
 											<td>
 												<Form.Check 
 													name="isCancelled"
@@ -376,6 +376,7 @@ class DairyInvoice extends React.Component {
 									<td><b>Total</b></td>
 									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalMilk }</b> Ltr</td>
 									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPrice }</b></td>
+									<td></td>
 								</tr>
 								{
 									dairyInvoice.balanceAmount ?
@@ -383,10 +384,12 @@ class DairyInvoice extends React.Component {
 										<tr>
 											<td colspan="2">{ dairyInvoice.isAdvance ? "Previous Advance" : "Previous Balance"}</td>
 											<td style={{textAlign: "right"}}>{ dairyInvoice.isAdvance ? "-" : "+"} { dairyInvoice.balanceAmount }</td>
+											<td></td>
 										</tr>
 										<tr>
 											<td colspan="2"><b>Total Payable</b></td>
 											<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPayable }</b></td>
+											<td></td>
 										</tr>
 									</> 
 									: <></>
@@ -444,11 +447,11 @@ class DairyInvoice extends React.Component {
 							</div>
 							
 						</div>
-						<Table bordered size="sm">
+						<Table bordered size="sm" style={{textAlign: "center"}}>
 							<thead>
 								<tr>
 									<th>Date</th>
-									<th>Quantity</th>
+									<th >Quantity</th>
 									<th>Price</th>
 								</tr>
 							</thead>
@@ -457,25 +460,28 @@ class DairyInvoice extends React.Component {
 									dairyInvoice.individualProducts.map((product, index)=>{
 										return <tr key={index} style={{textDecoration: product.isCancelled?"line-through":"none"}} >
 											<td>{product.date}</td>
-											<td style={{textAlign: "right"}}>{product.quantity}</td>
-											<td style={{textAlign: "right"}}>{product.price}</td>
+											<td >{product.quantity}</td>
+											<td >{product.price}</td>
 										</tr>
 									})
 								}
+								<tr style={{border: "0px solid #fff"}}>
+									<td colspan="3"></td>
+								</tr>
 								<tr>
-									<td><b>Total</b></td>
-									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalMilk }</b> Ltr</td>
+									<td style={{textAlign: "left"}}><b>Total</b></td>
+									<td ><b>{ dairyInvoice.totalMilk }</b> Ltr</td>
 									<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPrice }</b></td>
 								</tr>
 								{
 									dairyInvoice.balanceAmount ?
 									<>
 										<tr>
-											<td colspan="2">{ dairyInvoice.isAdvance ? "Previous Advance" : "Previous Balance"}</td>
+											<td colspan="2" style={{textAlign: "left"}}>{ dairyInvoice.isAdvance ? "Previous Advance" : "Previous Balance"}</td>
 											<td style={{textAlign: "right"}}>{ dairyInvoice.isAdvance ? "-" : "+"} { dairyInvoice.balanceAmount }</td>
 										</tr>
 										<tr>
-											<td colspan="2"><b>Total Payable (Rs.)</b></td>
+											<td colspan="2" style={{textAlign: "left"}}><b>Total Payable (Rs.)</b></td>
 											<td style={{textAlign: "right"}}><b>{ dairyInvoice.totalPayable }</b></td>
 										</tr>
 									</>
