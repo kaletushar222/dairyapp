@@ -152,9 +152,9 @@ class DairyInvoice extends React.Component {
 		let totalMilk = 0
 
 		dairyInvoice.individualProducts.forEach((object, index)=>{
+			const price = parseFloat(parseFloat(parseFloat(dairyInvoice.rate) * object.quantity).toFixed(2))
+			dairyInvoice.individualProducts[index]["price"] = price
 			if(!object.isCancelled){
-				const price = parseFloat(parseFloat(parseFloat(dairyInvoice.rate) * object.quantity).toFixed(2))
-				dairyInvoice.individualProducts[index]["price"] = price
 				totalPrice = totalPrice + price
 				totalMilk = totalMilk + object.quantity
 			}
@@ -458,13 +458,16 @@ class DairyInvoice extends React.Component {
 							<tbody>
 								{
 									dairyInvoice.individualProducts.map((product, index)=>{
-										return <tr key={index} style={{textDecoration: product.isCancelled?"line-through":"none"}} >
+										return <tr key={index} style={{textDecoration: product.isCancelled?"line-through":"none", fontWeight: product.isCancelled?"bold": "normal" }} >
 											<td>{product.date}</td>
 											<td >{product.quantity}</td>
 											<td >{product.price}</td>
 										</tr>
 									})
 								}
+								<tr style={{border: "0px solid #fff"}}>
+									<td colspan="3"></td>
+								</tr>
 								<tr style={{border: "0px solid #fff"}}>
 									<td colspan="3"></td>
 								</tr>
