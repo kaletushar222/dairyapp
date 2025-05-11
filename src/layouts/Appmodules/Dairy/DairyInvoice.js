@@ -18,7 +18,7 @@ class DairyInvoice extends React.Component {
 			dairyInvoice :{
 				name: '',
 				month: month,
-				rate: 45,
+				rate: 48,
 				billNo: Math.round(Math.random()*1000),
 				billDate: moment().format("DD/MM/YYYY"),
 				year: new Date().getFullYear(),
