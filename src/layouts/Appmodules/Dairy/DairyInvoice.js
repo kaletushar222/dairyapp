@@ -1,6 +1,8 @@
 import moment from 'moment';
 import React from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import './DairyApp.css';
 import Footer from './Components/Footer/Footer'
 import ForwardIcon from '../../../images/forward.png'
@@ -18,7 +20,7 @@ class DairyInvoice extends React.Component {
 			dairyInvoice :{
 				name: '',
 				month: month,
-				rate: 48,
+				rate: 50,
 				billNo: Math.round(Math.random()*1000),
 				billDate: moment().format("DD/MM/YYYY"),
 				year: new Date().getFullYear(),
@@ -175,13 +177,66 @@ class DairyInvoice extends React.Component {
 		})
 	}
 
-	downloadInvoice = () => {
+	downloadInvoice = async () => {
 		const { dairyInvoice } = this.state
-		$("#hide-btn").hide()
-		let title = document.title
-		document.title = dairyInvoice.name+'-'+this.getMonthShort()+'-'+dairyInvoice.year	
-		window.print();
-		document.title = title
+		const invoiceElement = document.getElementById('invoice-print-content')
+		const actionBar = document.getElementById('hide-btn')
+
+		if (!invoiceElement) {
+			return
+		}
+
+		if (actionBar) {
+			actionBar.style.visibility = 'hidden'
+		}
+
+		try {
+			const canvas = await html2canvas(invoiceElement, {
+				scale: 2,
+				backgroundColor: '#ffffff',
+				useCORS: true,
+				scrollX: 0,
+				scrollY: -window.scrollY
+			})
+
+			const imgData = canvas.toDataURL('image/png')
+			const pdf = new jsPDF('p', 'mm', 'a4')
+			const pageWidth = pdf.internal.pageSize.getWidth()
+			const pageHeight = pdf.internal.pageSize.getHeight()
+			const margin = 8
+			const availableWidth = pageWidth - (margin * 2)
+			const imgRatio = canvas.width / canvas.height
+			const imgWidth = availableWidth
+			const imgHeight = imgWidth / imgRatio
+			let heightLeft = imgHeight
+			let position = margin
+
+			if (heightLeft <= pageHeight - (margin * 2)) {
+				pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight)
+			} else {
+				let pageNumber = 1
+				while (heightLeft > 0) {
+					if (pageNumber > 1) {
+						pdf.addPage()
+					}
+					const pageContentHeight = pageHeight - (margin * 2)
+					const currentPageHeight = Math.min(heightLeft, pageContentHeight)
+					const currentImgHeight = (currentPageHeight * canvas.height) / (pageContentHeight * imgRatio)
+					pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, currentImgHeight, undefined, 'FAST')
+					heightLeft -= pageContentHeight
+					pageNumber += 1
+				}
+			}
+
+			pdf.save(`${dairyInvoice.name || 'Customer'}-${this.getMonthShort()}-${dairyInvoice.year}.pdf`)
+		} catch (error) {
+			console.error('Invoice PDF download failed:', error)
+			alert('Unable to download invoice as PDF right now.')
+		} finally {
+			if (actionBar) {
+				actionBar.style.visibility = 'visible'
+			}
+		}
 	}
 
 	componentWillUnmount(){
@@ -420,7 +475,7 @@ class DairyInvoice extends React.Component {
 		let months = moment.months()
   		return (
 			<div>
-				<div className='dairy-invoice'>
+				<div id='invoice-print-content' className='dairy-invoice'>
 						<div style={{ marginBottom:"8px" }}>
 							<center>
 								<h1>SHRI DATTA DAIRY FARM</h1>
