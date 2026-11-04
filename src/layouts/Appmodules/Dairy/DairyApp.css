@@ -1,7 +1,16 @@
 .dairy-invoice{
     margin: 2% 15% 2% 15%;
-    border: 2px solid grey;
     padding: 0.5% 1%;
+}
+
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 22px;    
+    }
+    .dairy-invoice{
+        margin: 3%;
+        padding: 2%;
+    }
 }
 h1 {
     font-size: 1.3rem;
