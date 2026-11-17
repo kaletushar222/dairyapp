@@ -303,7 +303,7 @@ class DairyInvoice extends React.Component {
 								</tr>
 							` : ''}
 							<tr>
-								<td style="border:1px solid #333; padding:5px 6px;">${dairyInvoice.isAdvance ? 'Previous Advance' : 'Previous Balance'}</td>
+								<td style="border:1px solid #333; padding:5px 6px;">${dairyInvoice.isAdvance ? 'Advance' : 'Previous Balance'}</td>
 								<td style="border:1px solid #333; padding:5px 6px; text-align:right;">&nbsp;</td>
 								<td style="border:1px solid #333; padding:5px 6px; text-align:right;">${dairyInvoice.isAdvance ? '-' : '+'} ${dairyInvoice.balanceAmount || 0}</td>
 							</tr>
@@ -593,7 +593,7 @@ class DairyInvoice extends React.Component {
 									dairyInvoice.balanceAmount ?
 									<>
 										<tr>
-											<td colspan="2">{ dairyInvoice.isAdvance ? "Previous Advance" : "Previous Balance"}</td>
+											<td colspan="2">{ dairyInvoice.isAdvance ? "Advance" : "Previous Balance"}</td>
 											<td style={{textAlign: "right"}}>{ dairyInvoice.isAdvance ? "-" : "+"} { dairyInvoice.balanceAmount }</td>
 											<td></td>
 										</tr>
@@ -700,7 +700,7 @@ class DairyInvoice extends React.Component {
 									dairyInvoice.balanceAmount ?
 									<>
 										<tr>
-											<td colspan="2" style={{textAlign: "left"}}>{ dairyInvoice.isAdvance ? "Previous Advance" : "Previous Balance"}</td>
+											<td colspan="2" style={{textAlign: "left"}}>{ dairyInvoice.isAdvance ? "Advance" : "Previous Balance"}</td>
 											<td style={{textAlign: "right"}}>{ dairyInvoice.isAdvance ? "-" : "+"} { dairyInvoice.balanceAmount }</td>
 										</tr>
 										<tr>
